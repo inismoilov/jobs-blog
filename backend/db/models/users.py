@@ -1,8 +1,9 @@
-from email.policy import default
-from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
-from sqlalchemy.orm import relationship
-
 from db.base_class import Base
+from sqlalchemy import Boolean
+from sqlalchemy import Column
+from sqlalchemy import Integer
+from sqlalchemy import String
+from sqlalchemy.orm import relationship
 
 
 class User(Base):
