@@ -1,4 +1,7 @@
 import json
+from urllib import response
+
+from fastapi import status
 
 
 def test_create_job(client):
@@ -36,3 +39,51 @@ def test_job_not_found(client):
     response = client.get("/jobs/get/2/")
     assert response.status_code == 404
     assert response.json()['detail'] == "Job with this id 2 does not exist"
+
+
+def test_read_all_jobs(client):
+    data = {
+       "title": "SDE super",
+       "company": "doogle",
+       "company_url": "www.doogle.com",
+       "location": "USA,NY",
+       "description": "python",
+       "date_posted": "2022-10-17"
+    }
+    client.post("/jobs/create-job/", json.dumps(data))
+    client.post("/jobs/create-job/", json.dumps(data))
+
+    response = client.get("/jobs/all/")
+    assert response.status_code == 200
+    assert response.json()[0]
+    assert response.json()[1]
+
+
+def test_update_a_job(client):
+    data = {
+        "title": "New Job super",
+        "company": "doogle",
+        "company_url": "www.doogle.com",
+        "location": "USA,NY",
+        "description": "fastapi",
+        "date_posted": "2022-03-20",
+    }
+    client.post("/jobs/create-job/", json.dumps(data))
+    data["title"] = "test new title"
+    response = client.put("/jobs/update/1", json.dumps(data))
+    assert response.json()["msg"] == "Successfully updated data."
+
+
+def test_delete_a_job(client):
+    data = {
+        "title": "New Job super",
+        "company": "doogle",
+        "company_url": "www.doogle.com",
+        "location": "USA,NY",
+        "description": "fastapi",
+        "date_posted": "2022-03-20"
+    }
+    client.post("/jobs/create-job/", json.dumps(data))
+    msg = client.delete("/jobs/delete/1")
+    response = client.get("/jobs/get/1/")
+    assert response.status_code == status.HTTP_404_NOT_FOUND

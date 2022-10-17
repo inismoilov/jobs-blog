@@ -32,3 +32,11 @@ requests
 
 #for styling pep8
 pre-commit
+
+
+#for jwt tekens
+python-jose
+
+
+#for accessing from data
+python-multipart
